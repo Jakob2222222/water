@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Bubble Animation</title>
+	<style>
+@keyframes wave {
+    from, to {
+      transform: translate(-50%, 0%);
+    }
+    
+    50% {
+      transform: translate(-50%, -20%);
+    }
+  }
+  
+  body {
+    background-color: rgb(10, 10, 10);
+    margin: 0px;
+  }
+  
+  #bubble-wrapper {
+    height: 150%;
+    width: 150%;
+    
+    position: fixed;
+    bottom: 0px;
+    
+    overflow: hidden;
+    pointer-events: none;
+  }
+  
+  .bubble {
+    height: max(300px, 30vw);
+    width: max(300px, 30vw);
+    
+    background-color: rgb(33, 150, 243);  
+    border-radius: 100%;
+    
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    
+    animation: wave 2s ease-in-out infinite;
+  }
+  
+  @media(prefers-reduced-motion) {
+    .bubble {
+      animation: none;
+      display: none;
+    }
+  }
+	</style>
+</head>
+<body>
+	<div id="bubble-wrapper"></div>
+
+	<script>
+		const wrapper = document.getElementById("bubble-wrapper");
+
+		/* -- Single-color version -- */
+		// const animateBubble = x => {  
+		//   const bubble = document.createElement("div");
+		  
+		//   bubble.className = "bubble";
+		//   bubble.style.left = `${x}px`;
+		  
+		//   wrapper.appendChild(bubble);
+		  
+		//   setTimeout(() => wrapper.removeChild(bubble), 2000);
+		// }
+
+		/* -- Multi-color version -- */
+
+		let index = 0;
+
+		/* -- Step 1️⃣: Create an "enum" of colors -- */
+
+		const Red = {
+		  One: "rgb(239, 83, 80)",
+		  Two: "rgb(244, 67, 54)",
+		  Three: "rgb(229, 57, 53)",
+		  Four: "rgb(211, 47, 47)",
+		  Five: "rgb(198, 40, 40)"
+		}
+
+		const Green = {
+		  One: "rgb(102, 187, 106)",
+		  Two: "rgb(76, 175, 80)",
+		  Three: "rgb(67, 160, 71)",
+		  Four: "rgb(56, 142, 60)",
+		  Five: "rgb(46, 125, 50)"
+		}
+
+		const Blue = {
+		  One: "rgb(0, 0, 230)",
+		  Two: "rgb(0, 0, 235)",
+		  Three: "rgb(0, 0, 240)",
+		  Four: "rgb(0, 0, 245)",
+		  Five: "rgb(0, 0, 255)"
+		}
+
+		const Color = Blue;
+
+		/* -- Step 2️⃣: Pick the order of colors -- */
+
+		const colors = [
+		  Color.One, 
+		  Color.Two, 
+		  Color.Three, 
+		  Color.Four, 
+		  Color.Five, 
+		  Color.Four, 
+		  Color.Three, 
+		  Color.Two
+		];
+
+		const animateBubble = x => {  
+		  const bubble = document.createElement("div");
+		  
+		  bubble.className = "bubble";
+		  bubble.style.left = `${x}px`;
+		    
+		  /* -- Step 3️⃣: Cycle through the colors using an index variable and the modulus (%) operator -- */
+		  
+		  bubble.style.backgroundColor = colors[index++ % (colors.length - 1)];
+		  
+		  wrapper.appendChild(bubble);
+		  
+		  setTimeout(() => wrapper.removeChild(bubble), 2000);
+		}
+
+		window.onmousemove = e => animateBubble(e.clientX);
+	</script>
+</body>
+</html>
